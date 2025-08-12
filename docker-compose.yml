@@ -1,0 +1,54 @@
+version: "3.3"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: chat-sentiment-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: chat_sentiment
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  ingest:
+    build:
+      context: .
+      dockerfile: ingest-service/Dockerfile
+    container_name: ingest-service
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/chat_sentiment
+      LOG_LEVEL: info
+      PORT: 3000
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: worker-service/Dockerfile
+    container_name: worker-service
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/chat_sentiment
+      LOG_LEVEL: info
+      WORKER_BATCH_SIZE: "10"
+      WORKER_INTERVAL_MS: "1000"
+      WORKER_PARALLELISM: "4"
+      RETRY_COUNT: "3"
+      RETRY_INTERVAL: "250"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

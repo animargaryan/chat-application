@@ -1,0 +1,22 @@
+{
+  "name": "chat-appliaction",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "nanoid": "^5.1.5",
+    "pg": "^8.16.3",
+    "zod": "^3.23.8",
+    "pino": "^9.8.0",
+    "pino-http": "^10.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node ingest-service/server.js",
+    "start:worker": "node worker-service/worker.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

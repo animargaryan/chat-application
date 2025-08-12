@@ -1,0 +1,23 @@
+# Node.js
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Build output
+/dist/
+/build/
+/.cache/
+/tmp/
+/temp/
+
+# OS
+.DS_Store
+
+# JetBrains / WebStorm
+.idea/
+*.iml
+out/
+.fleet/ 
