@@ -32,8 +32,7 @@ async function updateMessageSentiment(record) {
       user_id   = $2,
       message   = $3,
       metadata  = $4::jsonb,
-      created_at = $5::timestamptz,
-      sentiment = $6
+      sentiment = $5
     WHERE id = $1
     RETURNING id;
   `;
@@ -42,7 +41,6 @@ async function updateMessageSentiment(record) {
     record.userId,
     record.message,
     JSON.stringify(record.metadata || {}),
-    record.createdAt,
     record.sentiment || null,
   ];
   const result = await pool.query(updateSql, params);
