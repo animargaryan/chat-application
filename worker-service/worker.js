@@ -80,7 +80,7 @@ async function processMessage(msg) {
           ...msg.metadata,
           augmented: true
       },
-      createdAt: new Date().toISOString(),
+      createdAt: msg.createdAt,
       sentiment: result.sentiment,
     };
     await db.updateMessageSentiment(newMessageRecord);
